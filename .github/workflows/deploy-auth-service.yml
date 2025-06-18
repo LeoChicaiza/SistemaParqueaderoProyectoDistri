@@ -26,7 +26,7 @@ jobs:
       - name: Build and push Create Student Microservice
         uses: docker/build-push-action@v5
         with:
-          context: ./BackEnd
+          context: ./backEnd
           file: ./backend/Authentication_and_Users/auth-service/Dockerfile
           push: true
           tags: leochicaza/auth-service:latest
