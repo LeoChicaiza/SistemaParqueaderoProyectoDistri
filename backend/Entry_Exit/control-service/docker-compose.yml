@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  control-service:
+    build: .
+    ports:
+      - "5018:5018"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/control-db
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"

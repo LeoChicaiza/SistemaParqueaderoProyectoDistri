@@ -1,0 +1,14 @@
+{
+  "name": "entry-service",
+  "version": "1.0.0",
+  "description": "Microservice for registering vehicle entries to the parking lot",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3"
+  }
+}
