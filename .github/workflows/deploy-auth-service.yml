@@ -3,7 +3,7 @@ name: Deploy Auth Service to EC2
 on:
   push:
     branches:
-      - ramaProduccion  
+      - ramaQA
 
 jobs:
   deploy:
