@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  entry-service:
+    build: .
+    ports:
+      - "5015:5015"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/entry-db
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
