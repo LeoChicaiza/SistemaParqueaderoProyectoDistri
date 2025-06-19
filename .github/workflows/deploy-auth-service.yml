@@ -25,7 +25,7 @@ jobs:
           context: ./backend/Authentication_and_Users/auth-service
           file: ./backend/Authentication_and_Users/auth-service/Dockerfile
           push: true
-          tags: leochicaza/auth-service:latest
+          tags: leochicaiza/auth-service:latest
  
   deploy_to_ec2:
     name: Deploy Docker Containers to EC2
