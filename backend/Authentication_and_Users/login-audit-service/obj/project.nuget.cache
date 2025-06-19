@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "8IFYRrDvIPfM+qZumTSYdZdN7UvkDuyY7RMO8hXOjpSuSK4x6dwMp+wb/JTSXE31GF434Z/g79Jbz1kFLWt0ZA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\A\\OneDrive\\Escritorio\\ProyectoDistribuida\\SistemaParqueaderoProyectoDistri\\backend\\Authentication_and_Users\\login-audit-service\\login-audit-service.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\A\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.25\\microsoft.netcore.app.ref.6.0.25.nupkg.sha512",
+    "C:\\Users\\A\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.25\\microsoft.windowsdesktop.app.ref.6.0.25.nupkg.sha512",
+    "C:\\Users\\A\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.25\\microsoft.aspnetcore.app.ref.6.0.25.nupkg.sha512",
+    "C:\\Users\\A\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.25\\microsoft.netcore.app.host.win-x64.6.0.25.nupkg.sha512"
+  ],
+  "logs": []
+}
