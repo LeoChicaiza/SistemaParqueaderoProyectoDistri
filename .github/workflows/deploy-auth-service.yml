@@ -61,11 +61,11 @@ jobs:
             # Limpiar imágenes no utilizadas
             sudo docker system prune -f
             # Pull de la imagen
-            sudo docker pull leochicaza/auth-service:latest
+            sudo docker pull leochicaiza/auth-service:latest
             # Ejecutar el contenedor
             sudo docker run -d \
               --name auth-service \
               --env-file .env \
               -p 8001:8001 \
-              leochicaza/auth-service:latest
+              leochicaiza/auth-service:latest
             
