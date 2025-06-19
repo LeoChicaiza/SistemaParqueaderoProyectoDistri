@@ -3,3 +3,4 @@ uvicorn
 pyjwt
 python-jose
 pydantic
+psycopg2-binary
