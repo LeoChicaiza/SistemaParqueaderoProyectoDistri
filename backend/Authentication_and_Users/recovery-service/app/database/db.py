@@ -1,10 +1,12 @@
+import psycopg2
+import os
 
-# Simulación de base de datos de usuarios
-user_passwords = {}
+def get_connection():
+    return psycopg2.connect(
+        dbname=os.getenv("DB_NAME", "auth_and_users_db"),
+        user=os.getenv("DB_USER", "postgres"),
+        password=os.getenv("DB_PASSWORD", "12345"),
+        host=os.getenv("DB_HOST", "localhost"),
+        port=os.getenv("DB_PORT", "5432")
+    )
 
-def init():
-    global user_passwords
-    user_passwords = {
-        "admin@example.com": "admin123",
-        "user@example.com": "userpass"
-    }

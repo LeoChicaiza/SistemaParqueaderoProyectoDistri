@@ -7,6 +7,7 @@ app = FastAPI()
 
 @app.on_event("startup")
 def startup():
-    db.init()
-
+    connection = db.get_connection()
+    connection.close() 
+    
 app.include_router(recovery.router, prefix="/recovery", tags=["Password Recovery"])

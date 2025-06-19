@@ -1,17 +1,16 @@
-
-from fastapi import APIRouter, HTTPException
-from app.schemas.user import UserCreate, UserResponse
-from app.database.db import users_db
+from fastapi import APIRouter
+from app.database.db import get_connection
 
 router = APIRouter()
 
-@router.post("/register", response_model=UserResponse)
-def register_user(user: UserCreate):
-    if user.email in users_db:
-        raise HTTPException(status_code=400, detail="User already exists")
-    users_db[user.email] = {
-        "name": user.name,
-        "email": user.email,
-        "password": user.password
-    }
-    return UserResponse(name=user.name, email=user.email)
+@router.post("/create-user")
+def create_user(email: str, password: str, role: str = "user"):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO users (email, password, role) VALUES (%s, %s, %s)",
+                (email, password, role))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return {"message": "User created successfully"}
+

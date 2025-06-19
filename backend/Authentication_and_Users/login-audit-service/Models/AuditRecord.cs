@@ -1,4 +1,7 @@
 
+using System;
+
+
 namespace login_audit_service.Models
 {
     public class AuditRecord
