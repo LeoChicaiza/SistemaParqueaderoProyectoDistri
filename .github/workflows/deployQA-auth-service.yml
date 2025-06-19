@@ -1,10 +1,10 @@
-name: Deploy Auth Microservice to EC2
- 
+name: Deploy Microservices to EC2
+
 on:
   push:
     branches:
       - ramaQA
- 
+
 jobs:
   build_and_push_images:
     name: Build and Push Docker Images
@@ -12,16 +12,16 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
- 
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
- 
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
- 
+
       - name: Build and push Auth Service
         uses: docker/build-push-action@v5
         with:
@@ -29,7 +29,23 @@ jobs:
           file: ./backend/Authentication_and_Users/auth-service/Dockerfile
           push: true
           tags: leochicaiza/auth-service:latest
- 
+
+      - name: Build and push Access Control Service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend/Authentication_and_Users/access-control-service
+          file: ./backend/Authentication_and_Users/access-control-service/Dockerfile
+          push: true
+          tags: leochicaiza/access-control-service:latest
+
+      - name: Build and push Active Sessions Service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend/Authentication_and_Users/active-sessions-service
+          file: ./backend/Authentication_and_Users/active-sessions-service/Dockerfile
+          push: true
+          tags: leochicaiza/active-sessions-service:latest
+
   deploy_to_ec2:
     name: Deploy Docker Containers to EC2
     runs-on: ubuntu-latest
@@ -39,7 +55,7 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.EC2_KEY }}
- 
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -50,28 +66,29 @@ jobs:
           script: |
             # Instalar Docker si no existe
             if ! command -v docker &> /dev/null; then
-              echo "Instalando Docker..."
               sudo yum update -y
               sudo amazon-linux-extras install docker -y
               sudo service docker start
               sudo usermod -a -G docker ec2-user
-              echo "Docker instalado correctamente."
-            else
-              echo "Docker ya está instalado."
             fi
- 
-            # Detener y eliminar el contenedor si existe
+
+            # Parar y eliminar contenedores anteriores
             sudo docker stop auth-service || true
             sudo docker rm auth-service || true
- 
-            # Limpiar imágenes no utilizadas
+            sudo docker stop access-control-service || true
+            sudo docker rm access-control-service || true
+            sudo docker stop active-sessions-service || true
+            sudo docker rm active-sessions-service || true
+
+            # Limpiar imágenes
             sudo docker system prune -f
- 
-            # Pull de la imagen más reciente
+
+            # Pull e iniciar nuevos contenedores
             sudo docker pull leochicaiza/auth-service:latest
- 
-            # Ejecutar el contenedor SIN variables ni archivo .env
-            sudo docker run -d \
-              --name auth-service \
-              -p 8001:8001 \
-              leochicaiza/auth-service:latest
+            sudo docker pull leochicaiza/access-control-service:latest
+            sudo docker pull leochicaiza/active-sessions-service:latest
+
+            sudo docker run -d --name auth-service -p 8001:8001 leochicaiza/auth-service:latest
+            sudo docker run -d --name access-control-service -p 8002:8002 leochicaiza/access-control-service:latest
+            sudo docker run -d --name active-sessions-service -p 8003:8003 leochicaiza/active-sessions-service:latest
+
