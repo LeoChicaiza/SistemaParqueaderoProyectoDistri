@@ -1,9 +1,0 @@
-version: '3.8'
-
-services:
-  rate-calculation-service:
-    build: .
-    ports:
-      - "5021:5021"
-    environment:
-      - NODE_ENV=development

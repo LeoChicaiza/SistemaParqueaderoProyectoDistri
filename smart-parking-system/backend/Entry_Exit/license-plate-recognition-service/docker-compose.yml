@@ -1,9 +1,0 @@
-version: '3.8'
-
-services:
-  license-plate-recognition-service:
-    build: .
-    ports:
-      - "5019:5019"
-    environment:
-      - NODE_ENV=development

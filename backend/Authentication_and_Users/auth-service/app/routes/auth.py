@@ -21,3 +21,4 @@ def login(user: UserLogin):
 
     token = create_jwt_token({"email": user.email, "role": db_user["role"]})
     return TokenResponse(access_token=token)
+
