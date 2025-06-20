@@ -1,22 +1,59 @@
-
 from fastapi import APIRouter, HTTPException
 from app.schemas.slot import SlotCreate, SlotResponse
-from app.database.db import slot_db
+from app.database.db import get_connection
+import uuid
 
 router = APIRouter()
 
 @router.post("/", response_model=SlotResponse)
 def create_slot(slot: SlotCreate):
-    key = f"{slot.parking_lot}:{slot.level}:{slot.zone}:{slot.slot_id}"
-    if key in slot_db:
-        raise HTTPException(status_code=400, detail="Slot already exists")
-    slot_db[key] = slot.dict()
-    return SlotResponse(**slot.dict())
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        slot_id = str(uuid.uuid4())
+        cur.execute("""
+            INSERT INTO parking_slots (slot_id, zone_id, slot_number, slot_type, is_reserved)
+            VALUES (%s, %s, %s, %s, %s)
+            RETURNING slot_id, zone_id, slot_number, slot_type, is_reserved
+        """, (slot_id, slot.zone_id, slot.slot_number, slot.slot_type, slot.is_reserved))
+        result = cur.fetchone()
+        conn.commit()
+        return SlotResponse(
+            slot_id=result[0],
+            zone_id=result[1],
+            slot_number=result[2],
+            slot_type=result[3],
+            is_reserved=result[4]
+        )
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cur.close()
+        conn.close()
 
-@router.get("/{parking_lot}/{level}/{zone}/{slot_id}", response_model=SlotResponse)
-def get_slot(parking_lot: str, level: int, zone: str, slot_id: str):
-    key = f"{parking_lot}:{level}:{zone}:{slot_id}"
-    slot = slot_db.get(key)
-    if not slot:
-        raise HTTPException(status_code=404, detail="Slot not found")
-    return SlotResponse(**slot)
+@router.get("/", response_model=list[SlotResponse])
+def get_slots():
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            SELECT slot_id, zone_id, slot_number, slot_type, is_reserved
+            FROM parking_slots
+        """)
+        rows = cur.fetchall()
+        return [
+            SlotResponse(
+                slot_id=row[0],
+                zone_id=row[1],
+                slot_number=row[2],
+                slot_type=row[3],
+                is_reserved=row[4]
+            ) for row in rows
+        ]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cur.close()
+        conn.close()
+

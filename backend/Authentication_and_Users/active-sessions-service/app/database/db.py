@@ -10,8 +10,4 @@ def get_connection():
         port=os.getenv("DB_PORT", "5432")
     )
 
-def init():
-    
-    connection = get_connection()
-    connection.close()  
-    print("Base de datos inicializada")
+

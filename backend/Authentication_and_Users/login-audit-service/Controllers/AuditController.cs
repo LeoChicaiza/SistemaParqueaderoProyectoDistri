@@ -1,8 +1,8 @@
-
 using Microsoft.AspNetCore.Mvc;
 using login_audit_service.Models;
-using System.Collections.Generic;
-using System.Linq;
+using login_audit_service.Services;
+using System;
+using System.Linq; 
 
 
 namespace login_audit_service.Controllers
@@ -11,20 +11,28 @@ namespace login_audit_service.Controllers
     [Route("[controller]")]
     public class AuditController : ControllerBase
     {
-        private static readonly List<AuditRecord> AuditLogs = new();
+        private readonly DatabaseService _db;
 
-        [HttpPost]
-        public IActionResult LogAudit([FromBody] AuditRecord record)
+        public AuditController(DatabaseService db)
         {
-            AuditLogs.Add(record);
-            return Ok(new { message = "Audit logged successfully" });
+            _db = db;
         }
 
-        [HttpGet("{email}")]
-        public IActionResult GetLogs(string email)
+        [HttpPost]
+        public IActionResult Log([FromBody] AuditRecord record)
         {
-            var logs = AuditLogs.Where(r => r.Email == email).ToList();
-            if (!logs.Any()) return NotFound("No logs found for this email");
+            record.AuditId = Guid.NewGuid().ToString();
+            record.Timestamp = DateTime.UtcNow;
+
+            _db.InsertAudit(record);
+            return Ok(new { message = "Audit log stored." });
+        }
+
+        [HttpGet("{userId}")]
+        public IActionResult Get(string userId)
+        {
+            var logs = _db.GetAudits(userId);
+            if (!logs.Any()) return NotFound("No audit logs found.");
             return Ok(logs);
         }
     }

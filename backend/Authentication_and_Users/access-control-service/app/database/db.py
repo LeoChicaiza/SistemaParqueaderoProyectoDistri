@@ -11,9 +11,5 @@ def get_connection():
     )
 
 
-def init():
-    
-    connection = get_connection()
-    connection.close() 
-    print("Base de datos inicializada")
+
 

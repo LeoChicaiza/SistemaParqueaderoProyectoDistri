@@ -1,12 +1,13 @@
-
 from pydantic import BaseModel
+from datetime import datetime
 
 class ParkingLotCreate(BaseModel):
     name: str
     address: str
-    capacity: int
 
 class ParkingLotResponse(BaseModel):
+    lot_id: str
     name: str
     address: str
-    capacity: int
+    created_at: datetime
+

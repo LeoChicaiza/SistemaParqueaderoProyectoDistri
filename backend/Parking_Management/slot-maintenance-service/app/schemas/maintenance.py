@@ -1,12 +1,17 @@
-
 from pydantic import BaseModel
+from datetime import date
+from typing import Optional
 
-class MaintenanceRequest(BaseModel):
-    parking_lot: str
-    level: int
-    zone: str
+class MaintenanceCreate(BaseModel):
     slot_id: str
+    maintenance_date: date
+    description: Optional[str] = None
+    is_resolved: Optional[bool] = False
 
-class MaintenanceStatus(BaseModel):
+class MaintenanceResponse(BaseModel):
+    maintenance_id: str
     slot_id: str
-    status: str
+    maintenance_date: date
+    description: Optional[str]
+    is_resolved: bool
+
