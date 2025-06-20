@@ -1,14 +1,12 @@
-
 from pydantic import BaseModel
+from typing import Optional
 
 class ZoneCreate(BaseModel):
-    parking_lot: str
-    level: int
+    level_id: str
     name: str
-    type: str  # ejemplo: 'General', 'Discapacitados', 'VIP'
 
 class ZoneResponse(BaseModel):
-    parking_lot: str
-    level: int
+    zone_id: str
+    level_id: str
     name: str
-    type: str
+

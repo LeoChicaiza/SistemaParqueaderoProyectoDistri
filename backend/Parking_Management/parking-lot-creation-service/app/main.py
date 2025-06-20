@@ -1,12 +1,10 @@
 
 from fastapi import FastAPI
-from app.routes import parking
+from app.routes import parkings
 from app.database import db
 
 app = FastAPI()
 
-@app.on_event("startup")
-def startup():
-    db.init()
 
-app.include_router(parking.router, prefix="/parking-lots", tags=["Parking Lots"])
+
+app.include_router(parkings.router, prefix="/parking-lots", tags=["Parking Lots"])

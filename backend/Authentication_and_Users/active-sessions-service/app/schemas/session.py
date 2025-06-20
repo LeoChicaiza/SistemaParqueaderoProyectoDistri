@@ -1,10 +1,16 @@
-
 from pydantic import BaseModel
+from datetime import datetime
 
-class SessionData(BaseModel):
-    email: str
-    token: str
+class SessionCreate(BaseModel):
+    user_id: str
+    ip_address: str
+    user_agent: str
 
 class SessionResponse(BaseModel):
-    email: str
-    status: str
+    session_id: str
+    user_id: str
+    ip_address: str
+    user_agent: str
+    login_time: datetime
+    is_active: bool
+

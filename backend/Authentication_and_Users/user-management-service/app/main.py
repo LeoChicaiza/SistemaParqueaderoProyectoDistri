@@ -5,10 +5,6 @@ from app.database import db
 
 app = FastAPI()
 
-@app.on_event("startup")
-def startup():
-    
-    connection = db.get_connection()
-    connection.close() 
+
 
 app.include_router(users.router, prefix="/users", tags=["Users"])

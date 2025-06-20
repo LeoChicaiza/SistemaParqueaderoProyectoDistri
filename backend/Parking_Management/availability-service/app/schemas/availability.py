@@ -6,7 +6,7 @@ class SlotAvailability(BaseModel):
     level: int
     zone: str
     slot_id: str
-    status: str  # 'available', 'occupied', etc.
+    status: str  
 
 class AvailabilityResponse(BaseModel):
     slot_id: str

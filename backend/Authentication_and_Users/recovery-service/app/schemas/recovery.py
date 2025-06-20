@@ -1,9 +1,16 @@
-
 from pydantic import BaseModel
+from datetime import datetime
 
-class RecoveryRequest(BaseModel):
-    email: str
+class RecoveryRequestCreate(BaseModel):
+    user_id: str
+    token: str
+    expires_at: datetime
 
-class RecoveryResponse(BaseModel):
-    email: str
-    message: str
+class RecoveryRequestResponse(BaseModel):
+    recovery_id: str
+    user_id: str
+    token: str
+    expires_at: datetime
+    used: bool
+    requested_at: datetime
+

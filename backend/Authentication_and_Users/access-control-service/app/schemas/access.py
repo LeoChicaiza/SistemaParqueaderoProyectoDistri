@@ -1,10 +1,15 @@
-
 from pydantic import BaseModel
+from datetime import datetime
 
-class RoleAssignment(BaseModel):
-    email: str
-    role: str
+class AccessControlCreate(BaseModel):
+    user_id: str
+    resource: str
+    permission_level: str
 
-class RoleResponse(BaseModel):
-    email: str
-    role: str
+class AccessControlResponse(BaseModel):
+    access_id: str
+    user_id: str
+    resource: str
+    permission_level: str
+    granted_at: datetime
+
